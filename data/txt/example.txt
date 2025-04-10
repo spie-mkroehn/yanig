@@ -1,0 +1,47 @@
+# Künstliche Intelligenz
+Künstliche Intelligenz (KI), auch artifizielle Intelligenz (AI) (englisch artificial intelligence) ist ein Teilgebiet der Informatik, das sich mit der Automatisierung intelligenten Verhaltens und dem maschinellen Lernen befasst. Der Begriff ist schwierig zu definieren, da es bereits an einer genauen Definition von Intelligenz mangelt.
+Versuchsweise wird Intelligenz definiert als die Eigenschaft, die ein Wesen befähigt, angemessen und vorausschauend in seiner Umgebung zu agieren. Dazu gehört die Fähigkeit, Umgebungsdaten wahrzunehmen, d. h. Sinneseindrücke zu haben und darauf zu reagieren, Informationen aufzunehmen, zu verarbeiten und als Wissen zu speichern, Sprache zu verstehen und zu erzeugen, Probleme zu lösen und Ziele zu erreichen. Praktische Erfolge der KI werden schnell in die Anwendungsbereiche integriert und zählen dann nicht mehr zur KI.
+
+# Blockchain
+Eine Blockchain (auch Block Chain, englisch für Blockkette) ist eine kontinuierlich erweiterbare Liste von Datensätzen in einzelnen Blöcken. Neue Blöcke werden nach einem Konsensverfahren erstellt und mittels kryptographischer Verfahren an eine bestehende Kette angehängt. Jeder Block enthält dabei typischerweise einen kryptographisch sicheren Hash (Streuwert) des vorhergehenden Blocks, einen Zeitstempel und Transaktionsdaten.
+Eine Blockchain ist ein Beispiel einer Distributed-Ledger-Technologie (dezentral geführte Kontobuchtechnologie) oder DLT und ähnelt in der Funktionsweise dem Journal der Buchführung. Die Blockchain wird auch als „Internet der Werte“ (Internet of values) bezeichnet und legt die technische Basis für Kryptowährungen wie Bitcoin.
+
+# Virtuelle Realität
+Als virtuelle Realität, kurz VR, wird die Darstellung und gleichzeitige Wahrnehmung einer scheinbaren Wirklichkeit und ihrer physikalischen Eigenschaften in einer in Echtzeit computergenerierten, interaktiven virtuellen Umgebung bezeichnet. Geprägt wurde der Begriff Virtuelle Realität von dem Autor Damien Broderick in seinem 1982 erschienenen SF-Roman The Judas Mandala. 1987 erschien der Begriff erstmals als theoretisches Konzept im Oxford English Dictionary.
+Eine Vermischung der virtuellen Realität und der physischen Realität wird gemischte Realität (englisch Mixed Reality, auch Augmented Reality) genannt. Die Immersion in die VR kann zu temporären Erkrankungen führen, die der Seekrankheit ähneln und VR-Krankheit oder Simulator-Krankheit heißen.
+
+# Internet der Dinge
+Das Internet der Dinge (IdD) (auch: „Allesnetz“; englisch Internet of Things, Kurzform: IoT) ist ein Sammelbegriff für Technologien einer globalen Infrastruktur der Informationsgesellschaften, die es ermöglicht, physische und virtuelle Objekte miteinander zu vernetzen und sie durch Informations- und Kommunikationstechniken zusammenarbeiten zu lassen.
+Mit Technologien des „Internets der Dinge“ implementierte Funktionen erlauben die Interaktion zwischen Menschen und hierüber vernetzten beliebigen elektronischen Systemen sowie zwischen den Systemen an sich. Sie können darüber hinaus auch den Menschen bei seinen Tätigkeiten unterstützen. Die immer kleineren eingebetteten Geräte sollen Menschen unterstützen, ohne abzulenken oder überhaupt aufzufallen. So werden z. B. miniaturisierte Computer mit unterschiedlichen Sensoren direkt in Kleidungsstücke eingearbeitet, sogenannte Wearables.
+
+# Quantencomputer
+Ein Quantenprozessor bzw. Quantencomputer ist ein Prozessor, der die Gesetze der Quantenmechanik nutzt. Im Unterschied zum klassischen Computer arbeitet er nicht auf der Basis makroskopischer Zustände elektronischer Schaltkreise, sondern quantenmechanischer Zustände geeigneter Systeme. Damit ist es möglich, im Laufe der Rechnung Superpositionszustände und Quantenverschränkung zu erzeugen, die beide für die Informationsverarbeitung in Quantencomputern entscheidend sind.
+Quantenalgorithmen könnten die Berechnungszeit für viele mathematische und physikalische Problemstellungen deutlich verringern. Beispielsweise zeigen theoretische Studien, dass Quantenalgorithmen bestimmte Probleme der Informatik, z. B. die Suche in extrem großen Datenbanken (siehe Grover-Algorithmus) und die Faktorisierung großer Zahlen (siehe Shor-Algorithmus) effizienter lösen können als klassische Algorithmen.
+
+# Digitaler Zwilling
+Ein digitaler Zwilling (engl. digital twin) ist eine digitale Repräsentanz eines materiellen oder immateriellen Objekts aus der realen Welt in der digitalen Welt. Es ist unerheblich, ob das Gegenstück in der realen Welt bereits existiert oder zukünftig erst existieren wird. Digitale Zwillinge ermöglichen einen übergreifenden Datenaustausch. Sie bestehen aus Modellen des repräsentierten Objekts und können daneben Simulationen, Algorithmen und Services enthalten, die Eigenschaften oder Verhalten des repräsentierten Objekts beschreiben, beeinflussen, oder Dienste darüber anbieten.
+
+# Kollaborative Roboter
+Als kollaborativer Roboter oder kurz Cobot (aus dem Englischen: collaborative robot) wird ein Industrieroboter bezeichnet, der mit Menschen gemeinsam arbeitet und im Produktionsprozess nicht durch Schutzeinrichtungen von diesen getrennt ist.
+Die Besonderheit von kollaborierenden Robotern ist, dass sie in unmittelbarer Nähe zum Menschen und mit ihm gemeinsam arbeiten können. Dies setzt voraus, dass die Roboter keine Verletzungen beim Menschen hervorrufen können. Zäune und andere Schutzeinrichtungen sind dann nicht mehr nötig, da die Roboter über eigene Sensoren verfügen, die Verletzungen beim menschlichen Mitarbeiter verhindern. Die Roboter schalten sich automatisch ab, wenn sie Hindernisse berühren.
+
+# Cloud Computing
+Cloud Computing (aus dem Englischen, für Rechnerwolke oder Datenwolke) beschreibt ein Modell, das bei Bedarf – meistens über das Internet und geräteunabhängig – zeitnah und mit wenig Aufwand geteilte Computerressourcen als Dienstleistung, etwa in Form von Servern, Datenspeicher oder Applikationen, bereitstellt und nach Nutzung abrechnet. Angebot und Nutzung dieser Computerressourcen ist definiert und erfolgt in der Regel über eine Programmierschnittstelle (API) bzw. für Anwender über eine Website oder App. Der Begriff Cloud Computing wird meistens als Cloud abgekürzt.
+
+# Edge Computing
+Edge Computing bezeichnet im Gegensatz zum Cloud Computing die dezentrale Datenverarbeitung am Rand des Netzwerks, der sogenannten Edge (englisch für Rand oder Kante). Fog Computing ist eine Form von Edge Computing. Oft werden auch Begriffe wie Local Cloud bzw. Cloudlet genutzt. 
+Beim Edge Computing werden Computer-Anwendungen, Daten und Dienste von zentralen Knoten (Rechenzentren) weg verlagert. Der Begriff bezieht sich darauf, dass beim Edge Computing die relevanten Operationen am „Rand“ des Netzwerkes geschehen, also in der Netzwerkperipherie. Diese Operationen können die Erfassung, Aggregation, Aufbereitung und Analyse von Daten bedeuten. Die Berechnungen werden dabei dezentral dort vorgenommen, wo die Daten tatsächlich entstehen beziehungsweise erhoben werden.
+
+# Neuronales Netz
+Als neuronales Netz wird in den Neurowissenschaften eine beliebige Anzahl miteinander verbundener Neuronen bezeichnet, die als Teil eines Nervensystems einen auf bestimmte Funktionen ausgerichteten Zusammenhang bilden. Abstrahiert werden in Computational Neuroscience darunter auch vereinfachte Modelle einer biologischen Vernetzung verstanden.
+In der Informatik, Informationstechnik und Robotik werden deren Strukturen als künstliches neuronales Netz modelliert und technisch nachgebildet, simuliert und abgewandelt.
+
+# Wissensgraph
+Knowledge Graph (deutsch: Wissensgraph) ist eine Technik zur Darstellung von Wissen in einer strukturierten Form, die es Maschinen ermöglicht, semantische Zusammenhänge zwischen verschiedenen Informationen zu verstehen und zu verarbeiten.
+Ein Knowledge Graph ist eine semantische Datenbank, die Wissen in Form von Entitäten (Knoten) und deren Beziehungen (Kanten) speichert. Diese Struktur ermöglicht eine tiefere Bedeutungserkennung und eine bessere Suchmaschinenoptimierung. Der Begriff wurde insbesondere durch Google bekannt, als das Unternehmen 2012 seinen eigenen Knowledge Graph einführte.
+
+# Sprachmodell
+Ein Sprachmodell (englisch language model) ist ein mathematisches Modell, das die Abfolge von Elementen in einer Sequenz (zum Beispiel von Buchstaben oder Wörtern in natürlichsprachlichen Texten) modelliert, meist in Form eines stochastischen Prozesses.
+Sprachmodelle spielen eine zentrale Rolle in der modernen Computerlinguistik und sind eine entscheidende Komponente dortiger Praxisanwendungen, etwa bei der Textgenerierung zur maschinellen Übersetzung oder Spracherkennung. Bekanntheit gewonnen haben sie durch das Aufkommen von Generativer Künstlicher Intelligenz. So ist auch das ChatGPT zugrunde liegende GPT ein Sprachmodell.
+
+# Ende
