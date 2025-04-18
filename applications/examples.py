@@ -1,7 +1,7 @@
-from core import ComponentResultObject
+from core import ComponentResultObject, settings
 from api import Cro, VectorDB
 from functions import ElevenlabsAudio, HuggingFaceReranker
-from components import EmbeddingComponent, ChatComponent, PdfReaderComponent
+from components import EmbeddingComponent, ChatComponent, PdfReaderComponent, ComparatorComponent
 from agents import MRR
 from os.path import join
 from os import listdir
@@ -10,9 +10,6 @@ from os import listdir
 # pdf reader example
 def components_pdfreadercomponent_retrieve(app_path):
     pdf_path = join(app_path, 'data\\pdf\\beispiel.pdf')
-    json_path = join(app_path, 'data\\json\\beispiel\\')
-
-    chatbot = ChatComponent()
     pdfreader = PdfReaderComponent()
 
     input = ComponentResultObject()
@@ -71,6 +68,38 @@ def api_cro_read_api_vectordb_write(app_path):
 
     vdb.write(results)
 
+def components_comparator_invoke(app_path):
+    comparator = ComparatorComponent()
+    datas = []
+    print("Prepraing data")
+    with open(join(app_path, 'data\\txt\\ger.txt'), encoding="utf-8") as f:
+        data_ger = f.readlines()
+    with open(join(app_path, 'data\\txt\\eng.txt'), encoding="utf-8") as f:
+        data_eng = f.readlines()
+    if len(data_ger) != len(data_eng):
+        raise TypeError("length mismatch")
+    for i in range(len(data_eng)):
+        if len(data_eng[i]) > 10:           
+            data = ComponentResultObject()
+            data["content"]["original_text"] = data_eng[i]
+            data["preprocessing"]["result_text"] = data_ger[i]
+            datas.append(data)
+    print("Invoke ComparatorComponent")
+    result = comparator.invoke(datas)
+    with open(join(app_path, 'data\\txt\\res.txt'), "w", encoding="utf-8") as f:
+        for res in result:            
+            f.write("---\n")
+            f.write(str(res["preprocessing"]["score"]))
+            f.write("\n")
+            f.write(res["preprocessing"]["summary"])
+            f.write("\n\n")
+            f.write(res["content"]["original_text"])
+            f.write("\n")
+            f.write(res["preprocessing"]["result_text"])
+            f.write("\n")
+            f.write("---\n\n")
+    print("Finished")
+
 # semantic search example
 def components_embeddingcomponent_api_vektordb_read(app_path):
     ec = EmbeddingComponent()
@@ -110,8 +139,8 @@ def components_rerankercomponent(app_path):
 
 # simple chat-example (streaming)
 def components_chatcomponent():
-    for token in __chatbot_stream__():
-        print(token["message"]["content"], end="")
+    for token in __chatbot_stream__(provider=settings.ollama_model):
+        print(token, end="")
 
 def __chatbot_stream__(
     system_text: str = """
@@ -149,17 +178,3 @@ def agents_mrr_invoke(app_path):
 def functions_elevenlabsaudio_invoke():
     audio = ElevenlabsAudio()
     audio.invoke("Hallo mein Lieber. Ich freue mich, von dir zu hören. Wie kann ich dir heute helfen?")
-
-def functions_elevenlabsaudio_stream():
-    audio = ElevenlabsAudio()
-    user_input = None
-    while(True):
-        user_input = input(">")
-        audio.stream(__chatbot_stream__(
-            system_text="""
-                Dein Name ist Lea. Du bist ein hilfreiches Assistenzsystem.
-                Du unterstützt bei Recherchen zu wissenschaftlichen und technischen Themen.
-                Du bist freundlich und gelegentlich sarkastisch und schnippisch.
-            """,
-            user_text=user_input
-        ))

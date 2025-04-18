@@ -1,16 +1,15 @@
 from typing import Any, List, Dict
 import ollama
 from functions.basechat import BaseChat
-from globals import Globals
-import json
+import core.settings as settings
 
 
 '''
 this function provides an ollama endpoint to chat with
 '''
 class OllamaChat(BaseChat):
-    language_model:str=Globals.ollama_medium_model
-    temperature:float=Globals.temperature
+    language_model:str=None
+    temperature:float=settings.temperature
     structured_response: Dict[str, Any] = None
 
     def invoke(self, history: List[Dict[str, str]])->str:

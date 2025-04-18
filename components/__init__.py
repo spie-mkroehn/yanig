@@ -3,6 +3,7 @@ from components.basestreamingcomponent import BaseStreamingComponent
 from components.embeddingcomponent import EmbeddingComponent
 from components.chatcomponent import ChatComponent
 from components.pdfreadercomponent import PdfReaderComponent
+from components.comparatorcomponent import ComparatorComponent
 
 
 __all__ = [
@@ -11,4 +12,5 @@ __all__ = [
     "EmbeddingComponent",
     "ChatComponent",
     "PdfReaderComponent",
+    "ComparatorComponent",
 ]

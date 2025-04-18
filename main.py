@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from os.path import join, dirname
-from applications import examples
+import applications.examples as examples
 
 
 if __name__=="__main__":
@@ -8,13 +8,16 @@ if __name__=="__main__":
     load_dotenv(join(app_path, '.env'))
 
     #read pdfs
-    examples.components_pdfreadercomponent_retrieve(app_path)
+    #examples.components_pdfreadercomponent_retrieve(app_path)
 
     #generate standard embeddings from examples and write to json
     #examples.components_embeddingcomponent_api_cro_write(app_path)
 
     #read some cro data and write to chromadb
     #examples.api_cro_read_api_vectordb_write(app_path)
+
+    #comparator
+    #examples.components_comparator_invoke(app_path)
 
     #semantic search
     #examples.components_embeddingcomponent_api_vektordb_read(app_path)
@@ -30,4 +33,3 @@ if __name__=="__main__":
 
     #elevenlabsaudio
     #examples.functions_elevenlabsaudio_invoke()
-    #examples.functions_elevenlabsaudio_stream()

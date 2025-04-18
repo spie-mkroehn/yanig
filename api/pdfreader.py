@@ -1,5 +1,4 @@
 from typing import List
-
 import pdfplumber
 from core import ComponentResultObject
 from api import BaseApi

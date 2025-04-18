@@ -4,8 +4,8 @@ import string
 import json
 from typing import Any, List, Union
 from core import ComponentResultObject
+import core.settings as settings
 from api import BaseApi
-from globals import Globals
 
 
 class Cro(BaseApi):
@@ -50,7 +50,7 @@ class Cro(BaseApi):
                 },
             },
             "target": None,
-            "version": Globals.cro_version                        
+            "version": settings.cro_version                        
             }
         )
     

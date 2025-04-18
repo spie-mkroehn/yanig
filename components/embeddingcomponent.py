@@ -2,7 +2,7 @@ from typing import List
 from functions import BaseEmbedding, OllamaEmbedding, HuggingFaceEmbedding
 from components import BaseComponent
 from core import ComponentResultObject
-from globals import Globals
+import core.settings as settings
 
 
 '''
@@ -13,7 +13,7 @@ the modell is prefixed by "huggingface:" or "ollama:".
 this determines the function called for processing the embedding task.
 '''
 class EmbeddingComponent(BaseComponent):
-    embedding_model: str = Globals.ollama_embedding_model
+    embedding_model: str = settings.ollama_model
     em: BaseEmbedding = None
 
     def invoke(self, input:List[ComponentResultObject])->List[ComponentResultObject]:

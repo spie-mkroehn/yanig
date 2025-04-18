@@ -1,9 +1,9 @@
 from pydantic import BaseModel, Field
-from typing import Dict, Any
-from globals import Globals
+from typing import ClassVar, Dict, Any
 
 
 class ComponentResultObject(BaseModel):
+    cro_version: ClassVar[str] = "APOFIS v1"
     dictionary: Dict[str, Any] = Field(default_factory=lambda: {
         "unique_id": None,
         "source": None,
@@ -26,13 +26,14 @@ class ComponentResultObject(BaseModel):
                 "enhanced": None,
             },
             "questions": None,
+            "score": None,
         },
         "retrieval": {
             "rank": None,
             "distance": None,
         },
         "target": None,
-        "version": Globals.cro_version
+        "version": ComponentResultObject.cro_version
     })
 
     def __setitem__(self, key:str, val:str)->None:

@@ -16,8 +16,8 @@ class ElevenlabsAudio(BaseModel):
         audio_stream = self.client.text_to_speech.convert_as_stream(
             text=user_input,
             voice_id="7eVMgwCnXydb3CikjV7a", # Lea (German)
-            #model_id="eleven_multilingual_v2"
-            model_id="eleven_flash_v2.5"
+            model_id="eleven_multilingual_v2"
+            #model_id="eleven_flash_v2.5"
         )
         stream(audio_stream)
 
@@ -26,8 +26,8 @@ class ElevenlabsAudio(BaseModel):
         audio_stream = self.client.generate(
             text=user_input,
             voice="Lea",
-            #model="eleven_multilingual_v2",
-            model="eleven_flash_v2.5",
+            model="eleven_multilingual_v2",
+            #model="eleven_flash_v2.5",
             stream=True
         )
         stream(audio_stream)       

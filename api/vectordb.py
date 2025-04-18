@@ -2,7 +2,7 @@ import chromadb
 from typing import Any, Dict, List
 from core import ComponentResultObject
 from api import BaseApi
-from globals import Globals
+import core.settings as settings
 
 
 class VectorDB(BaseApi):
@@ -29,7 +29,7 @@ class VectorDB(BaseApi):
                 if embedding is not None:
                     ranking = collections[0].query(
                                 query_embeddings=[embedding],
-                                n_results=Globals.max_vectordb_results
+                                n_results=settings.max_vectordb_results
                             )
                     for i in range(len(ranking["ids"][0])):
                         results.append(self.__create_cro_from_vectordb_entry(

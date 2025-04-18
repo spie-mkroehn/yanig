@@ -56,14 +56,14 @@ class PdfReaderComponent(BaseComponent):
             pages:List[ComponentResultObject]
         ):
         chapters = []
-        for i in range(len(toc)-1):
+        for i in range(len(toc) - 1):
             chapter = ComponentResultObject()
             chapter["source"] = pdf["source"]
             chapter["content"]["chapter"] = toc[i]["chapter"]
             chapter["content"]["page_number"] = int(toc[i]["page_number"])
             chapter["content"]["page_count"] = int(toc[i+1]["page_number"]) - int(toc[i]["page_number"]) + 1
             chapters.append(chapter)
-        for i in range(len(chapters)-1):
+        for i in range(len(chapters) - 1):
             txt = pages[chapters[i]["content"]["page_number"] - 1]["content"]["original_text"]
             txt = f"{chapters[i]["content"]["chapter"]} {txt.split(f"{chapters[i]["content"]["chapter"]} ")[1:]}"
             if chapters[i]["content"]["page_count"] > 1:
