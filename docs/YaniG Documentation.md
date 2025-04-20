@@ -10,11 +10,6 @@
 6. [FAQ / Troubleshooting](#6-faq--troubleshooting)
 7. [Contributing / Development](#7-contributing--development)
 
-## Diagrams
-
-- [Class Diagram](diagrams/images/class_diagram.png)
-- [Data Flow Diagram](diagrams/images/data_flow_diagram.png)
-
 ---
 
 # 1. Introduction / Overview
@@ -145,10 +140,6 @@ YaniG uses environment variables for configuration. Create a `.env` file in the 
 OPENAI_API_KEY=your_openai_api_key
 HUGGINGFACEHUB_API_TOKEN=your_huggingface_token
 ELEVENLABS_API_KEY=your_elevenlabs_key
-
-# Model settings
-DEFAULT_EMBEDDING_MODEL=text-embedding-3-small
-DEFAULT_CHAT_MODEL=gpt-3.5-turbo
 ```
 
 Adjust these settings according to your specific requirements and available API keys.
@@ -173,6 +164,8 @@ python server.py
 Here's a minimal example to get you started with YaniG, based on the examples provided in the repository:
 
 ### Basic PDF Reader Example
+
+This example demonstrates how to extract text content from a PDF document. The PDFReaderComponent allows you to specify which pages to read and returns structured content including chapter information and page numbers along with the extracted text.
 
 ```python
 from core import ComponentResultObject
@@ -200,6 +193,8 @@ for result in results:
 
 ### Embedding Generation Example
 
+This example shows how to generate vector embeddings from text. Embeddings are numerical representations of text that capture semantic meaning, allowing for operations like semantic search and similarity comparison. The EmbeddingComponent converts text into high-dimensional vectors that can be used for various AI applications.
+
 ```python
 from core import ComponentResultObject
 from components import EmbeddingComponent
@@ -220,6 +215,8 @@ print(f"Generated embedding with {len(results[0]['content']['embedding'])} dimen
 ```
 
 ### Simple Chat Example
+
+This example demonstrates how to use the ChatComponent to interact with language models. The component maintains conversation context between interactions, allowing for multi-turn conversations. You can provide simple text prompts and receive natural language responses from the underlying AI model.
 
 ```python
 from components import ChatComponent
@@ -285,7 +282,17 @@ At its core, YaniG consists of several key modules organized in a layered archit
    - Provider integrations (OpenAI, HuggingFace, Ollama)
    - Audio processing capabilities
 
-4. **Applications Layer**: Demonstrates practical implementations
+4. **API Layer**: Provides interfaces for external communication
+   - Vector database API
+   - Component Result Object API
+   - External service integrations
+
+5. **Agents Layer**: Implements autonomous agents
+   - Agent definitions and behaviors
+   - Task planning and execution
+   - Multi-agent coordination
+
+6. **Applications Layer**: Demonstrates practical implementations
    - Example applications
    - MCP-Server for function call standardization
 
@@ -389,6 +396,8 @@ The `core` module provides fundamental structures and utilities:
 - `settings`: Configuration management
 - `structuredresponses`: Standardized response formatting
 
+![Core Module](diagrams/images/YaniG%20Core%20Module.png)
+
 ### Components Module
 
 The `components` module implements the processing units:
@@ -399,6 +408,8 @@ The `components` module implements the processing units:
   - `ChatComponent`: Interfaces with chat models
   - `EmbeddingComponent`: Generates vector embeddings
   - `ComparatorComponent`: Compares and ranks content
+
+![Components Module](diagrams/images/YaniG%20Components%20Module.png)
 
 ### Functions Module
 
@@ -414,11 +425,36 @@ The `functions` module integrates with external AI services:
 - Additional services:
   - `elevenlabsaudio.py`: Text-to-speech capabilities
 
+![Functions Module](diagrams/images/YaniG%20Functions%20Module.png)
+
+### API Module
+
+The `api` module provides interfaces for external communication:
+- `cro.py`: Component Result Object API for data exchange
+- `vectordb.py`: Vector database interface for storing and retrieving embeddings
+- `serviceintegration.py`: Integration with external services and APIs
+- `dataprocessing.py`: Data processing and transformation utilities
+
+![API Module](diagrams/images/YaniG%20API%20Module.png)
+
+### Agents Module
+
+The `agents` module implements autonomous agents:
+- `baseagent.py`: Abstract base class for all agents
+- `taskplanner.py`: Planning and scheduling of agent tasks
+- `executor.py`: Execution of agent tasks and actions
+- `multiagent.py`: Coordination between multiple agents
+- `memory.py`: Agent memory and knowledge management
+
+![Agents Module](diagrams/images/YaniG%20Agents%20Module.png)
+
 ### Applications Module
 
 The `applications` module demonstrates practical implementations:
 - `examples.py`: Sample usage patterns
 - `mcpserver`: Model Context Protocol server implementation
+
+![Applications Module](diagrams/images/YaniG%20Applications%20Module.png)
 
 ## Data Flow
 
@@ -432,6 +468,8 @@ The typical data flow in a YaniG application follows these steps:
 6. **Utilization**: Results are used by the application as needed
 
 For more complex workflows, components can be chained together using the `ComponentChain` class, allowing for sophisticated processing pipelines.
+
+![YaniG Data Flow Diagram](diagrams/images/YaniG%20Data%20Flow%20Diagram.png)
 
 ## Design Patterns
 
@@ -539,13 +577,6 @@ Module for managing configuration settings across the framework.
 |----------|-------------|
 | `load_dotenv(dotenv_path: str = None)` | Loads environment variables from .env file. |
 | `get_setting(key: str, default: Any = None) -> Any` | Retrieves a setting value by key. |
-
-#### Constants
-
-| Constant | Type | Description |
-|----------|------|-------------|
-| `DEFAULT_EMBEDDING_MODEL` | str | Default model for embeddings |
-| `DEFAULT_CHAT_MODEL` | str | Default model for chat |
 
 ### structuredresponses
 
@@ -880,6 +911,192 @@ Provides text-to-speech capabilities using ElevenLabs.
 |--------|-------------|
 | `__init__(voice_id: str = None)` | Initializes a new ElevenLabsAudio with optional voice ID. |
 | `text_to_speech(text: str, output_path: str) -> str` | Converts text to speech and saves to file. |
+
+## API Module
+
+The API module provides interfaces for external communication and data management.
+
+### Cro (Component Result Object API)
+
+```python
+class Cro
+```
+
+API for working with Component Result Objects, particularly for file operations.
+
+#### Methods
+
+| Method | Description |
+|--------|-------------|
+| `__init__()` | Initializes a new Cro instance. |
+| `retrieve(input: List[ComponentResultObject]) -> List[ComponentResultObject]` | Reads data from sources specified in the input objects. |
+| `write(input: List[ComponentResultObject]) -> bool` | Writes data to targets specified in the input objects. |
+
+#### Usage Example
+
+```python
+# Initialize the CRO API
+cro_api = Cro()
+
+# Create input objects with source paths
+inputs = [ComponentResultObject(source="/path/to/file.json")]
+
+# Retrieve data
+results = cro_api.retrieve(inputs)
+
+# Write data
+cro_api.write(results)
+```
+
+### VectorDB
+
+```python
+class VectorDB
+```
+
+Interface for vector database operations, supporting storage and retrieval of embeddings.
+
+#### Methods
+
+| Method | Description |
+|--------|-------------|
+| `__init__(client_path: str, client_collection: str)` | Initializes a new VectorDB with specified path and collection. |
+| `retrieve(input: ComponentResultObject) -> List[ComponentResultObject]` | Retrieves similar documents based on input embedding. |
+| `write(input: List[ComponentResultObject]) -> bool` | Stores embeddings in the vector database. |
+
+#### Input Fields (for retrieve)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `content.embedding` | list | Vector embedding to use for similarity search |
+| `preprocessing.top_k` | int | Number of results to return (optional) |
+
+#### Output Fields (from retrieve)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `content.original_text` | str | Text content of retrieved document |
+| `content.embedding` | list | Vector embedding of the document |
+| `preprocessing.score` | float | Similarity score |
+
+#### Usage Example
+
+```python
+# Initialize the vector database
+vdb = VectorDB(client_path="/path/to/db", client_collection="documents")
+
+# Store embeddings
+vdb.write(embedded_documents)
+
+# Retrieve similar documents
+results = vdb.retrieve(query_embedding)
+```
+
+### ServiceIntegration
+
+```python
+class ServiceIntegration
+```
+
+Integration with external services and APIs.
+
+#### Methods
+
+| Method | Description |
+|--------|-------------|
+| `__init__(service_name: str, credentials: dict = None)` | Initializes a new ServiceIntegration for the specified service. |
+| `connect() -> bool` | Establishes connection to the service. |
+| `execute(operation: str, parameters: dict) -> Any` | Executes an operation on the service. |
+| `disconnect() -> bool` | Closes the connection to the service. |
+
+## Agents Module
+
+The Agents module implements autonomous agents that can perform tasks and make decisions.
+
+### BaseAgent
+
+```python
+class BaseAgent(ABC)
+```
+
+Abstract base class for all agents.
+
+#### Methods
+
+| Method | Description |
+|--------|-------------|
+| `__init__(name: str, capabilities: List[str] = None)` | Initializes a new BaseAgent with a name and capabilities. |
+| `process(task: str) -> dict` | Abstract method that processes a task and returns results. |
+| `add_capability(capability: str) -> bool` | Adds a new capability to the agent. |
+
+### TaskPlanner
+
+```python
+class TaskPlanner
+```
+
+Plans and schedules tasks for agents.
+
+#### Methods
+
+| Method | Description |
+|--------|-------------|
+| `__init__()` | Initializes a new TaskPlanner. |
+| `create_plan(task: str) -> List[dict]` | Creates a plan of subtasks for the given task. |
+| `prioritize(tasks: List[dict]) -> List[dict]` | Prioritizes tasks based on importance and dependencies. |
+| `assign(tasks: List[dict], agents: List[BaseAgent]) -> dict` | Assigns tasks to appropriate agents. |
+
+### Executor
+
+```python
+class Executor
+```
+
+Executes agent tasks and actions.
+
+#### Methods
+
+| Method | Description |
+|--------|-------------|
+| `__init__(agent: BaseAgent)` | Initializes a new Executor for the specified agent. |
+| `execute(task: dict) -> dict` | Executes a task and returns the result. |
+| `monitor() -> dict` | Monitors the execution status. |
+| `abort() -> bool` | Aborts the current execution. |
+
+### MultiAgent
+
+```python
+class MultiAgent
+```
+
+Coordinates multiple agents for collaborative tasks.
+
+#### Methods
+
+| Method | Description |
+|--------|-------------|
+| `__init__(agents: List[BaseAgent])` | Initializes a new MultiAgent with a list of agents. |
+| `coordinate(task: str) -> dict` | Coordinates agents to complete a complex task. |
+| `communicate(from_agent: str, to_agent: str, message: dict) -> bool` | Facilitates communication between agents. |
+| `aggregate_results(results: List[dict]) -> dict` | Aggregates results from multiple agents. |
+
+### Memory
+
+```python
+class Memory
+```
+
+Manages agent memory and knowledge.
+
+#### Methods
+
+| Method | Description |
+|--------|-------------|
+| `__init__(capacity: int = None)` | Initializes a new Memory with optional capacity limit. |
+| `store(key: str, value: Any) -> bool` | Stores information in memory. |
+| `retrieve(key: str) -> Any` | Retrieves information from memory. |
+| `forget(key: str) -> bool` | Removes information from memory. |
+| `summarize() -> dict` | Generates a summary of stored information. |
 
 ## Applications Module
 

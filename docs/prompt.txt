@@ -59,4 +59,18 @@ MkDocs oder pdoc als Alternativen zu Sphinx
 black, ruff, mypy zur Code-Qualitätssicherung (Hinweis in der Doku)
 
 Die fertige Dokumentation sollte zwischen 20 und 50 Seiten umfassen.
+Sie sollte die einzelnen Module und deren Funktionen detailliert beschreiben, Anwendungsbeispiele zeigen und gegebenenfalls Diagramme zur Veranschaulichung der Architektur enthalten.
+
+
+---
+
+
+Du hast einen guten Entwurf für die Dokumentation abgeliefert. Es gibt noch einige Stellen, die du bearbeiten und verbessern müsstest. Du kannst dafür das ursprüngliche Limit von 50 Seiten ignorieren.
+Im Abschnitt "Environement Setup" erwähnst du #Model Settings (DEFAULT_EMBEDDING_MODEL, DEFAULT_CHAT_MODEL). Diese Parameter existieren im .env file allerdings nicht. Bitte entfernen.
+Kannst du im Abshcnitt "Quick Start Guide" zu jedem Beispiel noch eine kurze Beschreibung verfassen?
+Bei der Architekturbeschreibung unter "High Level Architecture" fehlen die Layer "API" und "Agents". Kannst du diese bitte ergänzen. Ebenso im Abschnitt "Module Relationships".
+Anstelle eines kompletten klassendiagramms für das Projekt, kannst du jeweils ein Klassendiagramm für "core", "components", "functions", "apis", "agents" und "applications" im Abschnitt "Module Relationships" erstellen, und an den entsprechenden stellen platzieren?
+Kannst du das Data Flow Diagramm im Abschnitt "Data Flow" anzeigen?
+Bitte erweitere die "API Reference" ebenfalls um die fehlenden Module "API" und "Agents".
+Alles andere lasse bitte unverändert. 
 
