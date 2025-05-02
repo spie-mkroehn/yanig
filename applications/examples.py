@@ -174,6 +174,12 @@ def agents_mrr_invoke(app_path):
     res = benchmark.invoke()
     print(f"MRR = {res}")
 
+# pre- and postprocessing of user chat
+# den user-query zunächst als "assistant" anfügen
+# anschließend: "user": bitte prüfe deine vorherige aussage auf zweckentfremdung
+# funktioniert ebenso für postprocessing: beinhaltet deine vorherige aussage sql injections etc.?
+# code in plain text: https://blog.virustotal.com/2023/04/introducing-virustotal-code-insight.html
+
 # streaming example using local llm and elevenlabs api (free tier)
 def functions_elevenlabsaudio_invoke():
     audio = ElevenlabsAudio()
