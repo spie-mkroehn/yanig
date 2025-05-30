@@ -3,7 +3,7 @@ from typing import ClassVar, Dict, Any
 
 
 class ComponentResultObject(BaseModel):
-    cro_version: ClassVar[str] = "APOFIS v1"
+    cro_version: ClassVar[str] = "YaniG v1"
     dictionary: Dict[str, Any] = Field(default_factory=lambda: {
         "unique_id": None,
         "source": None,

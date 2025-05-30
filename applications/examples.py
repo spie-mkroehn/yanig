@@ -171,7 +171,7 @@ def __chatbot_stream__(
 # linear agent that calculates mean reciprocal rank
 def agents_mrr_invoke(app_path):
     benchmark = MRR(dbpath=join(app_path, 'data\\db\\wiki'))
-    res = benchmark.invoke()
+    res = benchmark.run()
     print(f"MRR = {res}")
 
 # pre- and postprocessing of user chat

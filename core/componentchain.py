@@ -1,8 +1,10 @@
+from typing import List
 from pydantic import BaseModel
+from core import ComponentResultObject
 
 
 class ComponentChain(BaseModel):
-    def invoke(input, *funcs):
+    def invoke(data: List[ComponentResultObject], *funcs) -> List[ComponentResultObject]:
         for func in funcs:
-            input = func.invoke(input)
-        return input
+            data = func.invoke(data)
+        return data

@@ -50,7 +50,7 @@ class Cro(BaseApi):
                 },
             },
             "target": None,
-            "version": settings.cro_version                        
+            "version": ComponentResultObject.cro_version                        
             }
         )
     

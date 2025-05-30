@@ -1,13 +1,13 @@
 from os.path import join
 import json
 from typing import Any, Dict, List
-from pydantic import BaseModel
+from agents import BaseAgent
 from api import VectorDB
 from core import ComponentResultObject, QuestionStructure
 from components import ChatComponent, EmbeddingComponent
 
 
-class MRR(BaseModel):
+class MRR(BaseAgent):
     dbpath:str = None
 
     system_texts: Dict[str, str] = {
@@ -24,7 +24,7 @@ class MRR(BaseModel):
     }
 
 
-    def invoke(self):
+    def run(self):
         mrr_score = 0.0
         ec = EmbeddingComponent()
         vdb = VectorDB(
