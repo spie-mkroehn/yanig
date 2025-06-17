@@ -35,4 +35,7 @@ if __name__=="__main__":
     #examples.functions_elevenlabsaudio_invoke()
 
     #websearch
-    examples.components_websearchcomponent_invoke()
+    #examples.components_websearchcomponent_invoke()
+
+    #dialectical reasoning
+    examples.agents_dialecticalreasoning_invoke()

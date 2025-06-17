@@ -207,3 +207,43 @@ def components_websearchcomponent_invoke():
         print(f"Keywords: {result['preprocessing']['keywords']}")
         print(f"Publish Date: {result['content']['publish_date']}")
         print(f"Content preview: {result['content']['original_text'][:200]}...")
+
+# dialectical reasoning example
+def agents_dialecticalreasoning_invoke():
+    from agents import DialecticalReasoningAgent
+    
+    reasoning_agent = DialecticalReasoningAgent()
+    
+    # Test the philosophical reasoning
+    question = "Wird künstliche Intelligenz einmal so intelligent sein, dass sie den Menschen weit überlegen ist?"
+    context = {"question": question}
+    
+    print(f"🧠 Starting dialectical reasoning for: {question}\n")
+    
+    result = reasoning_agent.run(context)
+    
+    print("=" * 80)
+    print("📋 DIALECTICAL REASONING RESULT")
+    print("=" * 80)
+    print(f"Original Question: {result['original_question']}\n")
+    
+    print("🎯 THESE:")
+    print(f"{result['these']}\n")
+    
+    print("🎯 ANTITHESE:")  
+    print(f"{result['antithese']}\n")
+    
+    print("🔍 SEARCH TERMS:")
+    print(f"These: {result['these_search_term']}")
+    print(f"Antithese: {result['antithese_search_term']}\n")
+    
+    print("⚖️ ARGUMENTATION FÜR THESE:")
+    print(f"{result['these_argumentation']}\n")
+    
+    print("⚖️ ARGUMENTATION FÜR ANTITHESE:")
+    print(f"{result['antithese_argumentation']}\n")
+    
+    print("🎯 DIALECTICAL SYNTHESE:")
+    print(f"{result['synthese']}\n")
+    
+    print("=" * 80)
