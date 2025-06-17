@@ -4,6 +4,7 @@ from components.embeddingcomponent import EmbeddingComponent
 from components.chatcomponent import ChatComponent
 from components.pdfreadercomponent import PdfReaderComponent
 from components.comparatorcomponent import ComparatorComponent
+from components.websearchcomponent import WebSearchComponent
 
 
 __all__ = [
@@ -13,4 +14,5 @@ __all__ = [
     "ChatComponent",
     "PdfReaderComponent",
     "ComparatorComponent",
+    "WebSearchComponent",
 ]

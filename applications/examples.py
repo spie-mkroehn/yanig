@@ -184,3 +184,26 @@ def agents_mrr_invoke(app_path):
 def functions_elevenlabsaudio_invoke():
     audio = ElevenlabsAudio()
     audio.invoke("Hallo mein Lieber. Ich freue mich, von dir zu hören. Wie kann ich dir heute helfen?")
+
+
+# websearch example
+def components_websearchcomponent_invoke():
+    from components import WebSearchComponent
+    
+    websearch = WebSearchComponent()
+    
+    # Create input with search query
+    input_cro = ComponentResultObject()
+    input_cro["content"]["original_text"] = "artificial intelligence latest developments 2025"
+    input_cro["content"]["page_count"] = 3  # Get 3 search results
+    
+    results = websearch.invoke([input_cro])
+    
+    print(f"Found {len(results)} search results:")
+    for result in results:
+        print(f"\nRank: {result['retrieval']['rank']}")
+        print(f"Title: {result['content']['title']}")
+        print(f"URL: {result['source']}")
+        print(f"Keywords: {result['preprocessing']['keywords']}")
+        print(f"Publish Date: {result['content']['publish_date']}")
+        print(f"Content preview: {result['content']['original_text'][:200]}...")

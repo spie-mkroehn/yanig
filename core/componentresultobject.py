@@ -8,6 +8,7 @@ class ComponentResultObject(BaseModel):
         "unique_id": None,
         "source": None,
         "content": {
+            "title": None,
             "original_text": None,
             "chapter": None,
             "page_number": None,
@@ -15,6 +16,7 @@ class ComponentResultObject(BaseModel):
             "raw_image_data": None,
             "raw_audio_data": None,
             "sampling_rate": None,
+            "publish_date": None,
         },           
         "preprocessing": {
             "result_text": None,

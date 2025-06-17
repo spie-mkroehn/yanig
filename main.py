@@ -33,3 +33,6 @@ if __name__=="__main__":
 
     #elevenlabsaudio
     #examples.functions_elevenlabsaudio_invoke()
+
+    #websearch
+    examples.components_websearchcomponent_invoke()

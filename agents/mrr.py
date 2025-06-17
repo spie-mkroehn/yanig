@@ -1,7 +1,7 @@
 from os.path import join
 import json
 from typing import Any, Dict, List
-from agents import BaseAgent
+from agents.baseagent import BaseAgent
 from api import VectorDB
 from core import ComponentResultObject, QuestionStructure
 from components import ChatComponent, EmbeddingComponent

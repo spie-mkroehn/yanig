@@ -1,5 +1,5 @@
 from agents.mrr import MRR
-from baseagent import BaseAgent
+from agents.baseagent import BaseAgent
 
 
 __all__ = [
