@@ -12,27 +12,30 @@ class VectorDB(BaseApi):
     #read compares cro (standard and enhanced embedding) with vectordb
     def retrieve(self, input:List[ComponentResultObject])->List[ComponentResultObject]:
         client = chromadb.PersistentClient(path=self.client_path)
-        try:
-           collections = [
-               client.get_collection(name=f"{self.client_collection}_standard"),
-               client.get_collection(name=f"{self.client_collection}_enhanced"),
-            ]
-        except:
-            raise KeyError("VectorDB API: Collection does not exist.")
         
+        collections = [
+            self.__get_collection__(
+                client=client, 
+                collection_name=f"{self.client_collection}_standard"),
+            self.__get_collection__(
+                client=client, 
+                collection_name=f"{self.client_collection}_enhanced"),
+        ]
+      
         results = []
         for data in input:
-            for embedding in [
-                data["preprocessing"]["embedding"]["standard"],
-                data["preprocessing"]["embedding"]["enhanced"]
-            ]:
-                if embedding is not None:
-                    ranking = collections[0].query(
-                                query_embeddings=[embedding],
+            embeddings = [
+                    data["preprocessing"]["embedding"]["standard"],
+                    data["preprocessing"]["embedding"]["enhanced"]            
+            ]            
+            for i in range(settings.num_of_embedding_types):
+                if embeddings[i] is not None:
+                    ranking = collections[i].query(
+                                query_embeddings=[embeddings[i]],
                                 n_results=settings.max_vectordb_results
                             )
                     for i in range(len(ranking["ids"][0])):
-                        results.append(self.__create_cro_from_vectordb_entry(
+                        results.append(self.__create_cro_from_database_entry(
                             ranking["ids"][0][i], 
                             i,
                             ranking["distances"][0][i],
@@ -59,11 +62,13 @@ class VectorDB(BaseApi):
         metadatas = [
             {
                 "source": self.__check_for_none__(d["source"]),
+                "publish_date": self.__check_for_none__(d["content"]["publish_date"]),
                 "page_number": self.__check_for_none__(d["content"]["page_number"]),
                 "original_text": self.__check_for_none__(d["content"]["original_text"]),
                 "result_text": self.__check_for_none__(d["preprocessing"]["result_text"]),
                 "summary": self.__check_for_none__(d["preprocessing"]["summary"]),
-                "keywords": self.__check_for_none__(d["preprocessing"]["keywords"])
+                "keywords": self.__check_for_none__(d["preprocessing"]["keywords"]),
+                "category": self.__check_for_none__(d["preprocessing"]["category"]),
             } for d in output]
 
         for i in range(2):
@@ -87,7 +92,7 @@ class VectorDB(BaseApi):
         results = []
         datas = collections[0].get()
         for i in range(len(datas["ids"])):
-            results.append(self.__create_cro_from_vectordb_entry(
+            results.append(self.__create_cro_from_database_entry(
                 datas["ids"][i], 
                 i,
                 None,
@@ -99,7 +104,7 @@ class VectorDB(BaseApi):
     def __get_collection__(self, client:chromadb.PersistentClient, collection_name:str)->chromadb.Collection:
         return client.get_or_create_collection(
             name=collection_name,
-            metadata={"hnsw:batch_size":10000} #erforderlich da chroma sonst bei mehr als 100 einträgen (silent) crash
+            metadata={"hnsw:batch_size":10000} #erforderlich da chroma sonst bei mehr als 100 einträgen (silent) crashed
         )
     
     def __check_for_none__(self, value:str)->str:
@@ -107,16 +112,3 @@ class VectorDB(BaseApi):
             return ""
         else:
             return value
-
-    def __create_cro_from_vectordb_entry(self, id:str, rank:int, d:float, md:Dict[str, Any])->ComponentResultObject:
-        cro = ComponentResultObject()
-        cro["unique_id"] = id
-        cro["source"] = md["source"]
-        cro["content"]["original_text"] = md["original_text"]
-        cro["content"]["page_number"] = md["page_number"]
-        cro["preprocessing"]["result_text"] = md["result_text"]
-        cro["preprocessing"]["summary"] = md["summary"]
-        cro["preprocessing"]["keywords"] = md["keywords"]
-        cro["retrieval"]["rank"] = rank + 1
-        cro["retrieval"]["distance"] = d
-        return cro

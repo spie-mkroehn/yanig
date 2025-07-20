@@ -28,6 +28,7 @@ class ComponentResultObject(BaseModel):
                 "enhanced": None,
             },
             "questions": None,
+            "answers": None,
             "score": None,
         },
         "retrieval": {
