@@ -2,6 +2,7 @@ from api.baseapi import BaseApi
 from api.cro import Cro
 from api.vectordb import VectorDB
 from api.pdfreader import PdfReader
+from api.dbmanager import JourneyDBManager
 
 
 __all__ = [
@@ -9,4 +10,5 @@ __all__ = [
     "Cro", 
     "VectorDB",
     "PdfReader",
+    "JourneyDBManager"
 ]
