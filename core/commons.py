@@ -2,7 +2,7 @@ from typing import Any, Dict
 from functions import BaseChat, OllamaChat, HuggingFaceChat, OpenAIChat
 
 
-def __prepare_llm__(
+def _prepare_llm(
     model: str, 
     temperature: float, 
     structured_response: Dict[str, Any])->BaseChat:
@@ -29,4 +29,4 @@ def __prepare_llm__(
             temperature=temperature                
         )
     else:
-        raise TypeError("__prepare_llm__: chat model name invalid")
+        raise TypeError("_prepare_llm: chat model name invalid")

@@ -34,7 +34,7 @@ class ComparatorComponent(BaseComponent):
         '''
 
         if self.llm is None:
-            self.llm = commons.__prepare_llm__(
+            self.llm = commons._prepare_llm(
                     model=self.language_model,
                     temperature=self.temperature,
                     structured_response=self.structured_response

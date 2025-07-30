@@ -8,12 +8,6 @@ import re
 from datetime import datetime
 
 
-'''
-This component performs web search using Wikipedia API and extracts content from found articles.
-Input: ComponentResultObject with content/original_text containing search keywords
-       and optional content/page_count for number of results (default: 5)
-Output: List of ComponentResultObjects, one for each search result with extracted content
-'''
 class WebSearchComponent(BaseComponent):
     max_results: int = 5
     timeout: int = 10
@@ -29,17 +23,17 @@ class WebSearchComponent(BaseComponent):
             if search_query is None or search_query.strip() == "":
                 continue
                 
-            search_results = self.__perform_wikipedia_search__(search_query, max_results)
-            extracted_results = self.__extract_content_from_urls__(search_results, search_query)
+            search_results = self._perform_wikipedia_search(search_query, max_results)
+            extracted_results = self._extract_content_from_urls(search_results, search_query)
             results.extend(extracted_results)
             
         return results
     
-    def __perform_wikipedia_search__(self, query: str, max_results: int) -> List[dict]:
+    def _perform_wikipedia_search(self, query: str, max_results: int) -> List[dict]:
         """Perform Wikipedia search and return list of results"""
         try:
             # Clean up query for Wikipedia - remove year/time references and "latest"
-            cleaned_query = self.__clean_query_for_wikipedia__(query)
+            cleaned_query = self._clean_query_for_wikipedia(query)
             
             opensearch_url = "https://en.wikipedia.org/w/api.php"
             
@@ -60,7 +54,7 @@ class WebSearchComponent(BaseComponent):
             
             if len(search_data) < 4 or len(search_data[1]) == 0:
                 # If no results, try with just the core topic
-                fallback_query = self.__extract_core_topic__(query)
+                fallback_query = self._extract_core_topic(query)
                 
                 search_params['search'] = fallback_query
                 response = requests.get(opensearch_url, params=search_params, headers=headers, timeout=self.timeout)
@@ -92,17 +86,17 @@ class WebSearchComponent(BaseComponent):
             print(f"WebSearchComponent: Wikipedia search failed for query '{query}': {str(e)}")
             return []
     
-    def __clean_query_for_wikipedia__(self, query: str) -> str:
+    def _clean_query_for_wikipedia(self, query: str) -> str:
         """Clean search query to work better with Wikipedia"""
         # Remove temporal words that don't exist in Wikipedia
-        temporal_words = ['latest', 'recent', 'current', 'new', 'emerging', '2024', '2025', 'developments', 'trends']
+        temporal_words = ['aktuellste', 'neueste', 'aktuelle', 'neue', 'kommende', '2024', '2025', 'entwicklungen', 'trends']
         
         words = query.lower().split()
         cleaned_words = [word for word in words if word not in temporal_words]
         
         return ' '.join(cleaned_words)
     
-    def __extract_core_topic__(self, query: str) -> str:
+    def _extract_core_topic(self, query: str) -> str:
         """Extract the core topic from query for fallback search"""
         # Simple extraction - take the first 1-2 main words
         words = query.lower().split()
@@ -116,7 +110,7 @@ class WebSearchComponent(BaseComponent):
         
         return ' '.join(core_words) if core_words else 'artificial intelligence'
     
-    def __extract_content_from_urls__(self, search_results: List[dict], original_query: str) -> List[ComponentResultObject]:
+    def _extract_content_from_urls(self, search_results: List[dict], original_query: str) -> List[ComponentResultObject]:
         """Extract content from each URL and create ComponentResultObjects"""
         extracted_results = []
         
@@ -130,8 +124,8 @@ class WebSearchComponent(BaseComponent):
                     continue
                 
                 # Extract content from URL
-                content = self.__fetch_and_extract_content__(url)
-                publish_date = self.__extract_publish_date__(content, result)
+                content = self._fetch_and_extract_content(url)
+                publish_date = self._extract_publish_date(content, result)
                 
                 # Create ComponentResultObject
                 cro = ComponentResultObject()
@@ -154,7 +148,7 @@ class WebSearchComponent(BaseComponent):
                 
         return extracted_results
     
-    def __fetch_and_extract_content__(self, url: str) -> str:
+    def _fetch_and_extract_content(self, url: str) -> str:
         """Fetch webpage and extract main content"""
         try:
             headers = {'User-Agent': self.user_agent}
@@ -195,7 +189,7 @@ class WebSearchComponent(BaseComponent):
             print(f"WebSearchComponent: Failed to fetch content from {url}: {str(e)}")
             return ""
     
-    def __extract_publish_date__(self, content: str, search_result: dict) -> str:
+    def _extract_publish_date(self, content: str, search_result: dict) -> str:
         """Try to extract publish date from content or search result"""
         try:
             # Ensure content is a string

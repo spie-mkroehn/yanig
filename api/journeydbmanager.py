@@ -11,7 +11,7 @@ class JourneyDBManager(BaseModel):
 
     def get_session(self) -> Session:
         return self._Session()
-    
+
     def close_session(self, session: Session) -> None:
         session.close()
 
@@ -36,31 +36,6 @@ class JourneyDBManager(BaseModel):
         session.commit()
         return character
     
-    def create_item(self, data: Dict[str, Any]) -> JourneyDBSchema.Item:
-        session = self.get_session()
-        item = JourneyDBSchema.Item(
-            name=data["name"],
-            desc=data["desc"],
-            owner_id=data.get("owner_id"),
-            str=data["str"],
-            int=data["int"],
-            dex=data["dex"]
-        )
-        session.add(item)
-        session.commit()
-        return item
-    
-    def create_diary_entry(self, data: Dict[str, Any]) -> JourneyDBSchema.DairyEntries:
-        session = self.get_session()
-        diary_entry = JourneyDBSchema.DairyEntries(
-            title=data["title"],
-            desc=data["desc"],
-            keywords=data["keywords"]
-        )
-        session.add(diary_entry)
-        session.commit()
-        return diary_entry
-    
     def create_quest(self, data: Dict[str, Any]) -> JourneyDBSchema.Quests:
         session = self.get_session()
         quest = JourneyDBSchema.Quests(
@@ -77,22 +52,17 @@ class JourneyDBManager(BaseModel):
         character = session.query(JourneyDBSchema.Character).filter_by(name=character_name).first()
         return character
 
-    def get_item_by_owner(self, owner_name: str) -> list[JourneyDBSchema.Item]:
-        session = self.get_session()
-        items = session.query(JourneyDBSchema.Item).filter_by(owner_name=owner_name).all()
-        return items
-
-    def get_diary_entries_by_keyword(self, keyword: str) -> list[JourneyDBSchema.DairyEntries]:
-        session = self.get_session()
-        entries = session.query(JourneyDBSchema.DairyEntries).filter(JourneyDBSchema.DairyEntries.keywords.contains(keyword)).all()
-        return entries
-    
-    def get_latest_diary_entries(self, limit: int = 10) -> list[JourneyDBSchema.DairyEntries]:
-        session = self.get_session()
-        entries = session.query(JourneyDBSchema.DairyEntries).order_by(JourneyDBSchema.DairyEntries.datetime.desc()).limit(limit).all()
-        return entries
-
     def get_random_quest(self, question: str) -> JourneyDBSchema.Quests:
         session = self.get_session()
         quest = session.query(JourneyDBSchema.Quests).filter_by(question=question).order_by(func.random()).first()
         return quest
+
+    def modify_character(self, character_name: str, data: Dict[str, Any]) -> JourneyDBSchema.Character:
+        session = self.get_session()
+        character = session.query(JourneyDBSchema.Character).filter_by(name=character_name).first()
+        if character:
+            for key, value in data.items():
+                setattr(character, key, value)
+            session.commit()
+        return character
+    
