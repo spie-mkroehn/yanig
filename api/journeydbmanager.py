@@ -26,11 +26,11 @@ class JourneyDBManager(BaseModel):
         character = JourneyDBSchema.Character(
             name=data["name"],
             desc=data["desc"],
-            xp=data["xp"],
-            hp=data["hp"],
-            str=data["str"],
-            int=data["int"],
-            dex=data["dex"]
+            xp=0,
+            hp=10,
+            str=10,
+            int=10,
+            dex=10
         )
         session.add(character)
         session.commit()
