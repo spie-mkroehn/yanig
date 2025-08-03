@@ -1,13 +1,13 @@
 from sqlalchemy import create_engine, Engine, func
 from sqlalchemy.orm import sessionmaker, Session
-from pydantic import BaseModel
 from api.journeydbschema import JourneyDBSchema
 from typing import Any, Dict
 
 
-class JourneyDBManager(BaseModel):
-    _engine: Engine = create_engine("sqlite:///journey.db")
-    _Session = sessionmaker(bind=_engine)
+class JourneyDBManager:
+    def __init__(self):
+        self._engine = create_engine("sqlite:///journey.db")
+        self._Session = sessionmaker(bind=self._engine)
 
     def get_session(self) -> Session:
         return self._Session()
@@ -23,46 +23,75 @@ class JourneyDBManager(BaseModel):
 
     def create_character(self, data: Dict[str, Any]) -> JourneyDBSchema.Character:
         session = self.get_session()
-        character = JourneyDBSchema.Character(
-            name=data["name"],
-            desc=data["desc"],
-            xp=0,
-            hp=10,
-            str=10,
-            int=10,
-            dex=10
-        )
-        session.add(character)
-        session.commit()
-        return character
+        try:
+            character = JourneyDBSchema.Character(
+                name=data["name"],
+                desc=data["desc"],
+                xp=0,
+                hp=10,
+                str=10,
+                int=10,
+                dex=10
+            )
+            session.add(character)
+            session.commit()
+            # Refresh the object to make sure all data is loaded
+            session.refresh(character)
+            return character
+        finally:
+            self.close_session(session)
     
     def create_quest(self, data: Dict[str, Any]) -> JourneyDBSchema.Quests:
         session = self.get_session()
-        quest = JourneyDBSchema.Quests(
-            question=data["question"],
-            answers=data["answers"],
-            correct_answer=data["correct_answer"]
-        )
-        session.add(quest)
-        session.commit()
-        return quest
+        try:
+            quest = JourneyDBSchema.Quests(
+                question=data["question"],
+                answers=data["answers"],
+                correct_answer=data["correct_answer"]
+            )
+            session.add(quest)
+            session.commit()
+            session.refresh(quest)
+            return quest
+        finally:
+            self.close_session(session)
     
     def get_character(self, character_name: str) -> JourneyDBSchema.Character:
         session = self.get_session()
-        character = session.query(JourneyDBSchema.Character).filter_by(name=character_name).first()
-        return character
+        try:
+            character = session.query(JourneyDBSchema.Character).filter_by(name=character_name).first()
+            if character:
+                session.refresh(character)
+            return character
+        finally:
+            self.close_session(session)
 
-    def get_random_quest(self, question: str) -> JourneyDBSchema.Quests:
+    def get_random_quest(self) -> JourneyDBSchema.Quests:
         session = self.get_session()
-        quest = session.query(JourneyDBSchema.Quests).filter_by(question=question).order_by(func.random()).first()
-        return quest
+        try:
+            # Get total count of quests first
+            total_quests = session.query(JourneyDBSchema.Quests).count()
+            if total_quests == 0:
+                return None
+            
+            # Get a truly random quest using SQLAlchemy's random function
+            quest = session.query(JourneyDBSchema.Quests).order_by(func.random()).first()
+            if quest:
+                session.refresh(quest)
+            return quest
+        finally:
+            self.close_session(session)
 
     def modify_character(self, character_name: str, data: Dict[str, Any]) -> JourneyDBSchema.Character:
         session = self.get_session()
-        character = session.query(JourneyDBSchema.Character).filter_by(name=character_name).first()
-        if character:
-            for key, value in data.items():
-                setattr(character, key, value)
-            session.commit()
-        return character
+        try:
+            character = session.query(JourneyDBSchema.Character).filter_by(name=character_name).first()
+            if character:
+                for key, value in data.items():
+                    setattr(character, key, value)
+                session.commit()
+                session.refresh(character)
+            return character
+        finally:
+            self.close_session(session)
     

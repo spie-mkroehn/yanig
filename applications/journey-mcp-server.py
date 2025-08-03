@@ -2,12 +2,19 @@ from mcp.server import Server
 from mcp.server.stdio import stdio_server
 from mcp.types import TextContent, Tool
 import asyncio
+import sys
+import os
+
+# Füge das übergeordnete Verzeichnis zum Python-Pfad hinzu
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from api import JourneyDBManager
 
 
 # Server-Instanz erstellen
 server = Server("journey-mcp-server")
 journey_db_manager = JourneyDBManager()
+journey_db_manager.create_all()
 
 @server.list_tools()
 async def list_tools() -> list[Tool]:
@@ -80,16 +87,47 @@ async def list_tools() -> list[Tool]:
         ),
         Tool(
             name="get_random_quest",
-            description="Liefert eine zufällige Quest",
+            description="Liefert eine zufällige Quest aus der Datenbank",
+            inputSchema={
+                "type": "object",
+                "properties": {},
+                "required": []
+            }
+        ),
+        Tool(
+            name="create_quest",
+            description="Erstellt eine neue Quest/Frage in der Datenbank",
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "random_number": {
+                    "question": {
+                        "type": "string",
+                        "description": "Die Frage"
+                    },
+                    "answer1": {
+                        "type": "string",
+                        "description": "Antwortmöglichkeit 1"
+                    },
+                    "answer2": {
+                        "type": "string", 
+                        "description": "Antwortmöglichkeit 2"
+                    },
+                    "answer3": {
+                        "type": "string",
+                        "description": "Antwortmöglichkeit 3"
+                    },
+                    "answer4": {
+                        "type": "string",
+                        "description": "Antwortmöglichkeit 4"
+                    },
+                    "correct_answer": {
                         "type": "integer",
-                        "description": "Zufallszahl für die Quest"
+                        "description": "Index der richtigen Antwort (1-4)",
+                        "minimum": 1,
+                        "maximum": 4
                     }
                 },
-                "required": ["random_number"]
+                "required": ["question", "answer1", "answer2", "answer3", "answer4", "correct_answer"]
             }
         )
     ]
@@ -101,38 +139,57 @@ async def call_tool(name: str, arguments: dict | None) -> list[TextContent]:
             if not arguments or "name" not in arguments or "desc" not in arguments:
                 raise ValueError("Name und Beschreibung sind erforderlich")
             character = journey_db_manager.create_character(arguments)
-            return [TextContent(f"Charakter '{character.name}' erstellt.")]
+            return [TextContent(type="text", text=f"Charakter '{character.name}' erstellt.")]
         elif name == "get_character":
             if not arguments or "name" not in arguments:
                 raise ValueError("Name ist erforderlich")
             character = journey_db_manager.get_character(arguments["name"])
             if character:
-                return [TextContent(f"Charakter: {character.name}, Beschreibung: {character.desc}, "
+                return [TextContent(type="text", text=f"Charakter: {character.name}, Beschreibung: {character.desc}, "
                                     f"XP: {character.xp}, HP: {character.hp}, "
                                     f"Str: {character.str}, Int: {character.int}, Dex: {character.dex}")]
             else:
-                return [TextContent("Charakter nicht gefunden.")]
+                return [TextContent(type="text", text="Charakter nicht gefunden.")]
         elif name == "modify_character":
             if not arguments or "name" not in arguments:
                 raise ValueError("Name ist erforderlich")
             character = journey_db_manager.modify_character(arguments["name"], arguments)
             if character:
-                return [TextContent(f"Charakter '{character.name}' modifiziert.")]
+                return [TextContent(type="text", text=f"Charakter '{character.name}' modifiziert.")]
             else:
-                return [TextContent("Charakter nicht gefunden.")]
+                return [TextContent(type="text", text="Charakter nicht gefunden.")]
         elif name == "get_random_quest":
-            if not arguments or "random_number" not in arguments:
-                raise ValueError("Zufallszahl ist erforderlich")
-            quest = journey_db_manager.get_random_quest(arguments["random_number"])
+            quest = journey_db_manager.get_random_quest()
             if quest:
-                return [TextContent(f"Quest: {quest.question}, Antworten: {quest.answers}, "
+                return [TextContent(type="text", text=f"Quest: {quest.question}, Antworten: {quest.answers}, "
                                     f"Richtige Antwort: {quest.correct_answer}")]
             else:
-                return [TextContent("Keine Quest gefunden.")]
+                return [TextContent(type="text", text="Keine Quests in der Datenbank vorhanden. Bitte erstellen Sie zuerst einige Quests.")]
+        elif name == "create_quest":
+            if not arguments or not all(key in arguments for key in ["question", "answer1", "answer2", "answer3", "answer4", "correct_answer"]):
+                raise ValueError("Alle Felder (question, answer1-4, correct_answer) sind erforderlich")
+            
+            import json
+            # Create answers array in the expected format
+            answers = [
+                {"text": arguments["answer1"], "is_correct": arguments["correct_answer"] == 1},
+                {"text": arguments["answer2"], "is_correct": arguments["correct_answer"] == 2},
+                {"text": arguments["answer3"], "is_correct": arguments["correct_answer"] == 3},
+                {"text": arguments["answer4"], "is_correct": arguments["correct_answer"] == 4}
+            ]
+            
+            quest_data = {
+                "question": arguments["question"],
+                "answers": json.dumps(answers),
+                "correct_answer": arguments["correct_answer"] - 1  # Convert to 0-based index
+            }
+            
+            quest = journey_db_manager.create_quest(quest_data)
+            return [TextContent(type="text", text=f"Quest '{quest.question[:50]}...' wurde erfolgreich erstellt!")]
         else:
-            return [TextContent(f"Unbekanntes Tool: {name}")]
+            return [TextContent(type="text", text=f"Unbekanntes Tool: {name}")]
     except Exception as e:
-        return [TextContent(f"Fehler: {str(e)}")]
+        return [TextContent(type="text", text=f"Fehler: {str(e)}")]
 
 async def main():
     """

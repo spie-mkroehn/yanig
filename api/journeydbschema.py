@@ -1,9 +1,8 @@
 from sqlalchemy import Column, Integer, String, Index
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
-from pydantic import BaseModel
 
 
-class JourneyDBSchema(BaseModel):
+class JourneyDBSchema:
     _base: DeclarativeMeta = declarative_base()
 
     class Character(_base):
@@ -17,11 +16,12 @@ class JourneyDBSchema(BaseModel):
         int = Column(Integer)
         dex = Column(Integer)
 
-    _character_index: Index = Index('idx_character_name', Character.name)
-
     class Quests(_base):
         __tablename__ = 'quests'
         id = Column(Integer, primary_key=True)
         question = Column(String(500))
         answers = Column(String(200))
         correct_answer = Column(Integer)
+
+    # Indizes
+    _character_index: Index = Index('idx_character_name', Character.name)
